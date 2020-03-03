@@ -4,13 +4,16 @@ from functools import partial
 import pytest
 from sklearn.utils.estimator_checks import parametrize_with_checks
 
-from gtda.images.preprocessing import Binarizer, Inverter
+from gtda.images.preprocessing import Binarizer, Inverter, Padder,\
+    ImageToPointCloud
 
 
 # mark checks to skip
 SKIP_TESTS = {
   'Binarizer':  [],
   'Inverter':  [],
+  'Padder': [],
+  'ImageToPointCloud': []
 }
 
 # mark tests as a known failure
@@ -25,6 +28,14 @@ XFAIL_TESTS = {
                 "check_transformer_general",
                 "check_transformer_general(readonly_memmap=True)",
                 ],
+  'Padder': ["check_transformer_data_not_an_array",
+             "check_transformer_general",
+             "check_transformer_general(readonly_memmap=True)",
+             ],
+  'ImageToPointCloud': ["check_transformer_data_not_an_array",
+                        "check_transformer_general",
+                        "check_transformer_general(readonly_memmap=True)",
+                        ]
 }
 
 
@@ -71,7 +82,7 @@ def _get_estimator_name(estimator):
 
 
 @parametrize_with_checks(
-    [Binarizer, Inverter]
+    [Binarizer, Inverter, Padder, ImageToPointCloud]
 )
 def test_sklearn_api(check, estimator, request):
     estimator_name = _get_estimator_name(estimator)
