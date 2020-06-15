@@ -301,13 +301,15 @@ class Pipeline(pipeline.Pipeline):
         """
         # _final_estimator is None or has transform, otherwise attribute error
         if self._final_estimator != 'passthrough':
-            self._final_estimator.resample
+            #self._final_estimator.resample
+            pass
         return self._resample
 
     def _resample(self, X, y=None):
         yr = y
         for _, _, transform in self._iter():
-            yr = transform.resample(yr)
+            if hasattr(transform, "resample"):
+                yr = transform.resample(yr)
         return yr
 
     @property

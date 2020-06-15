@@ -842,6 +842,9 @@ class FlagserPersistence(BaseEstimator, TransformerMixin, PlotterMixin):
         if 0 in self._homology_dimensions:
             Xdgms[0] = Xdgms[0][:-1, :]  # Remove final death at np.inf
 
+        for k in range(len(Xdgms)):
+            Xdgms[k] = Xdgms[k].reshape(-1, 2)
+
         return Xdgms
 
     def fit(self, X, y=None):
