@@ -55,7 +55,7 @@ class PersistenceEntropy(BaseEstimator, TransformerMixin):
         X_lifespan = X[:, :, 1] - X[:, :, 0]
         lifespan_sums = np.sum(X_lifespan, axis=1).reshape(-1, 1)
         X_normalized = X_lifespan / lifespan_sums
-        res =  - np.sum(np.nan_to_num(
+        res = - np.sum(np.nan_to_num(
             X_normalized * np.log(X_normalized)), axis=1).reshape(-1, 1)
         if normalize_nb_pts:
             return res / np.log(lifespan_sums)
