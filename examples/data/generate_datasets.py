@@ -1,6 +1,31 @@
 import numpy as np
 from pathlib import Path
 
+def make_random_point_clouds(n_samples_per_shape:int, n_points, seed: int=0):
+    np.random.seed(seed)
+    # Circles (label: 0)
+    theta = 2*np.pi*np.random.rand(n_samples_per_shape, n_points)
+    circle_point_clouds = np.stack([np.cos(theta), np.sin(theta), 0.*theta], axis=-1)
+    
+    # Spheres (label: 1)
+    theta, phi = 2*np.pi*np.random.rand(2, n_samples_per_shape, n_points)
+    sphere_point_clouds = np.stack([np.cos(theta)*np.cos(phi),
+                                    np.cos(theta)*np.sin(phi),
+                                    np.sin(theta),], axis=-1)
+    
+    # Torii (label: 2)
+    theta, phi = 2*np.pi*np.random.rand(2, n_samples_per_shape, n_points)
+    torus_point_clouds = np.stack([(2+np.cos(theta))*np.cos(phi),
+                                    (2+np.cos(theta))*np.sin(phi),
+                                    np.sin(theta)], axis=-1)
+    
+    labels = np.concatenate([np.zeros(n_samples_per_shape),
+                             np.ones(n_samples_per_shape),
+                             2.*np.ones(n_samples_per_shape)])
+    point_clouds = np.concatenate([circle_point_clouds, sphere_point_clouds, torus_point_clouds])
+    
+    return point_clouds, labels
+
 
 def make_point_clouds(n_samples_per_shape: int, n_points: int, noise: float):
     """Make point clouds for circles, spheres, and tori with random noise.
